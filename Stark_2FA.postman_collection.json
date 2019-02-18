@@ -1,0 +1,9 @@
+{
+	"info": {
+		"_postman_id": "ed32ac90-c64b-48d1-9189-8205145ed6fc",
+		"name": "Stark_2FA",
+		"description": "Stark Bank project of Two Factor login API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": []
+}
