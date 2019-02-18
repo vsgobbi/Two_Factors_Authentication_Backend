@@ -5,5 +5,175 @@
 		"description": "Stark Bank project of Two Factor login API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
-	"item": []
+	"item": [
+		{
+			"name": "https://stark-bank.appspot.com/api/login?Content-Type=application/json",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Vitor\",\n    \"phonenumber\": \"12997507663\"\n}"
+				},
+				"url": {
+					"raw": "https://stark-bank.appspot.com/api/login?Content-Type=application/json",
+					"protocol": "https",
+					"host": [
+						"stark-bank",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"login"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					]
+				},
+				"description": "Login post request with \"name\" and \"phonenumber\" json data"
+			},
+			"response": []
+		},
+		{
+			"name": "https://stark-bank.appspot.com/api/validate?Content-Type=application/json",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"4512\"\n}"
+				},
+				"url": {
+					"raw": "https://stark-bank.appspot.com/api/validate?Content-Type=application/json",
+					"protocol": "https",
+					"host": [
+						"stark-bank",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"validate"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					]
+				},
+				"description": "Token validation post method "
+			},
+			"response": []
+		},
+		{
+			"name": "https://stark-bank.appspot.com/api/verify/12997507663",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://stark-bank.appspot.com/api/verify/12997507663",
+					"protocol": "https",
+					"host": [
+						"stark-bank",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"verify",
+						"12997507663"
+					]
+				},
+				"description": "Verify profile and its status by phonenumber"
+			},
+			"response": []
+		},
+		{
+			"name": "https://stark-bank.appspot.com/",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://stark-bank.appspot.com/",
+					"protocol": "https",
+					"host": [
+						"stark-bank",
+						"appspot",
+						"com"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Maps all json profiles"
+			},
+			"response": []
+		},
+		{
+			"name": "https://stark-bank.appspot.com/api/verifieds?Content-Type=application/json",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://stark-bank.appspot.com/api/verifieds?Content-Type=application/json",
+					"protocol": "https",
+					"host": [
+						"stark-bank",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"verifieds"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					]
+				},
+				"description": "GET only verifieds profiles with Google Datastore request"
+			},
+			"response": []
+		}
+	]
 }

@@ -140,7 +140,7 @@ def create_profile():
     #store the phone number for further validation
     session['phone_number'] = phone_number
     session['country_code'] = country_code
-
+    session['key_id'] = int(key_id % 100000)
     api.phones.verification_start(phone_number, country_code, via='sms')
     return jsonify({'verification': make_public(user)}), 201
 
@@ -157,25 +157,23 @@ def test_token():
         return jsonify({'Error': 'token must have 4 digits'}), 400
     phone_number = session.get('phone_number')
     country_code = session.get('country_code')
+    key_id = session.get('key_id')
+    if not phone_number or not key_id:
+        return jsonify({'Error': 'insert phonenumber first'}), 400
     #key = datastore_client.key(kind, str(phone_number[6:]))
-    key = datastore_client.key(kind, int(phone_number % 10000))
+    key = datastore_client.key(kind, int(key_id % 100000))
     user = datastore_client.get(key)
     user['token'] = user_data['token']
     datastore_client.put(user)
     verification_code = user_data['token']
-    print(verification_code, type(verification_code))
-
-    print(phone_number, type(phone_number))
     verification = api.phones.verification_check(phone_number, country_code, verification_code)
-    print(verification)
-    print(verification.ok)
     if verification.ok():
         user_data['token'] = request.json
         user['verified'] = True
         datastore_client.put(user)
         return jsonify({'verification': make_public(user)}), 201
     ver_errors = str(verification.errors())
-    return jsonify({user['verified']: str(ver_errors[15:-2])}), 400
+    return jsonify({user['verified']: str(ver_errors[12:-2])}), 400
 
 
 if __name__ == '__main__':
