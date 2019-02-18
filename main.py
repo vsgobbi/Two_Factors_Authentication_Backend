@@ -1,7 +1,5 @@
 import os
-import webapp2
 from flask import Flask, jsonify, request, abort, url_for, session
-from flask_login import LoginManager
 from authy.api import AuthyApiClient
 from authy import AuthyApiException
 from google.cloud import datastore
@@ -18,7 +16,6 @@ except:
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'stark_bank-5d1c7cbb2258.json'
 
-login_manager = LoginManager()
 datastore_client = datastore.Client()
 builtin_list = list
 kind = '2FA'
@@ -51,14 +48,10 @@ def add_user(name, phonenumber):
     print('Stored user: {}: {}'.format(user['name'], user['phonenumber']))
     return user
 
-#add_user('Mark', '11951233121')
-add_user(u'Mark', 11951233141)
-add_user(u'Mike', 11951233161)
-
 
 def insert_token(token, phonenumber):
     key = datastore_client.key(kind, int(phonenumber % 100000))
-    #user = datastore.Entity(key=key)
+    user = datastore.Entity(key=key)
     user = datastore_client.get(key)
     user['token'] = token
     datastore_client.put(user)
@@ -79,7 +72,7 @@ def list_users(limit=10, cursor=None):
     query_iterator = query.fetch(limit=limit, start_cursor=cursor)
     page = next(query_iterator.pages)
 
-    entities = builtin_list(map(from_datastore(), page))
+    entities = builtin_list(from_datastore(), page)
     next_cursor = (
         query_iterator.next_page_token.decode('utf-8')
         if query_iterator.next_page_token else None)
@@ -99,26 +92,27 @@ def make_public(verified):
 
 @app.route('/')
 def get():
-    return jsonify({'2FA profiles': map(make_public, get_all())})
+    return jsonify({'2FA profiles': builtin_list(map(make_public, get_all()))})
 
 
-@app.route('/api/v1.0/verifieds', methods=['GET'])
+@app.route('/api/verifieds', methods=['GET'])
 def get_profile():
-    #return jsonify({'verify': map(make_public_task, tasks)})
-    return jsonify({'verifieds_profiles': map(make_public, get_verifieds())})
-    #return jsonify({'verified_users': get_verifieds()})
+    return jsonify({'verifieds_profiles': builtin_list(map(make_public, get_verifieds()))})
 
 
-@app.route('/api/v1.0/verify/<int:verify_id>', methods=['GET'])
-def get_profiles(verify_id):
-    verified = filter(lambda t: t['id'] == verify_id, get_all())
-    if len(verified) == 0:
-        abort(404)
-    #return jsonify({'verify': make_public_task(task[0])})
-    return jsonify({'verify': verified[0]})
+@app.route('/api/verify/<int:verify_phone>', methods=['POST'])
+def get_profiles(verify_phone):
+    query = datastore_client.query(kind='2FA')
+    print(verify_phone)
+    query.add_filter('phonenumber', '=', str(verify_phone))
+    fetched = list(query.fetch())
+    print(fetched)
+    if not fetched: 
+        return jsonify({'verify': "phone not founded"}), 400
+    return jsonify({'verify': fetched}), 200
 
 
-@app.route('/api/v1.0/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def create_profile():
     if not request.json or not 'phonenumber' in request.json or "" in request.json:
         return jsonify({'Error': 'phone number not found'}), 400
@@ -128,7 +122,6 @@ def create_profile():
     }
     key_id = int(user_data['phonenumber'])
     phonenumber = str(user_data['phonenumber'])
-    #if len(user_data['phonenumber']) != 11:
     if len(phonenumber) != 11:
         return jsonify({'Wrong number format': 'Please insert your 11 digits '
                                                'phone number with area code and number ex:1196249256'}), 400
@@ -152,7 +145,7 @@ def create_profile():
     return jsonify({'verification': make_public(user)}), 201
 
 
-@app.route('/api/v1.0/validate', methods=['POST'])
+@app.route('/api/validate', methods=['POST'])
 def test_token():
     if not 'token' in request.json or '' in request.json:
         return jsonify({'Error': 'token not found'}), 400
@@ -185,6 +178,5 @@ def test_token():
     return jsonify({user['verified']: str(ver_errors[15:-2])}), 400
 
 
-app = webapp2.WSGIApplication()
-#if __name__ == '__main__':
-#    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
