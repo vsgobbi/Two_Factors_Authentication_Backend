@@ -1,0 +1,10 @@
+.venv/
+venv/
+.idea
+*.pyc
+__pyc__
+__init_
+
+
+__pycache__
+lib/
