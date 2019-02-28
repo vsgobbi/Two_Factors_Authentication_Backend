@@ -1,4 +1,4 @@
-#Example of Two Factors Authentication API using Google Cloud App Engine and Google NoSQL Datastore
+# Example of Two Factors Authentication API using Google Cloud App Engine and Google NoSQL Datastore
 
 Note: When accessing API routers inside browser panel, use the following path: localhost:5000/api/{routes}.
 In order to run it create a json file for google cloud credentials.
@@ -27,12 +27,16 @@ You also can use 'curl' or 'httpie' instead of Postman to access the API.
 3.0 Check the postman.json file to test the API
 
 3.1 Export pip libs to lib folder in order to deploy on google cloud:
+``` shell
+	pip install -t lib -r requirements.txt
+```
 
-> pip install -t lib -r requirements.txt
 
 3.2 Deploy to your App Engine:
+``` shell
+	gcloud app deploy
+```
 
-> gcloud app deploy
 
 ### GPL v.0.3
 ### Django RESTFUL API free to use under GPL license, created by vitorsgobbi@hotmail.com
