@@ -4,7 +4,7 @@ venv/
 *.pyc
 __pyc__
 __init_
-
-
+.gitignore
+stark_bank-5d1c7cbb2258.json
 __pycache__
 lib/

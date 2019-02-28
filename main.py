@@ -45,7 +45,8 @@ def add_user(name, phonenumber):
         'verified': False,
     })
     datastore_client.put(user)
-    print('Stored user: {}: {}'.format(user['name'], user['phonenumber']))
+    #For testing purpose
+    #print('Stored user: {}: {}'.format(user['name'], user['phonenumber']))
     return user
 
 
@@ -55,12 +56,13 @@ def insert_token(token, phonenumber):
     user = datastore_client.get(key)
     user['token'] = token
     datastore_client.put(user)
+    #For test purpose
+    #print('Stored token: {}: {}'.format(user['token'], phonenumber))
     return user
 
 
 def from_datastore():
     key = datastore_client.key(kind, 'user')
-    #user = datastore.Entity(key=key)
     user = datastore_client.get(key)
     return user
 
@@ -103,7 +105,6 @@ def get_profile():
 @app.route('/api/verify/<int:verify_phone>', methods=['POST'])
 def get_profiles(verify_phone):
     query = datastore_client.query(kind='2FA')
-    print(verify_phone)
     query.add_filter('phonenumber', '=', str(verify_phone))
     fetched = list(query.fetch())
     print(fetched)
@@ -133,10 +134,10 @@ def create_profile():
     user['name'] = user_data['name']
     user['verified'] = False
     datastore_client.put(user)
-    print('Stored user: {}: {}'.format(user['name'], user['phonenumber']))
 
     country_code = u'55'
     phone_number = request.json.get("phonenumber")
+    
     #store the phone number for further validation
     session['phone_number'] = phone_number
     session['country_code'] = country_code
