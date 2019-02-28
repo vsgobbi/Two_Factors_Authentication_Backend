@@ -14,7 +14,8 @@ try:
 except:
     raise AuthyApiException
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'stark_bank-5d1c7cbb2258.json'
+#Create google datastore credential with API KEY and store it here:
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'your-api-5d1b7cdd2258.json'
 
 datastore_client = datastore.Client()
 builtin_list = list
